@@ -12,35 +12,44 @@ import img6 from "./6.png";
 it("renders the carousel without crashing", function () {
   render(
     <Snowman
-      photos={[img0, img1, img2, img3, img4, img5, img6]}
+      images={[img0, img1, img2, img3, img4, img5, img6]}
       words={["apple"]}
       maxWrong={6}
-    />
-  );
-});
+      />
+      );
+    });
 
 it("displays you lose when maxWrong is reached", function () {
+  const maxWrong = 6;
+
   const { container } = render(
     <Snowman
-      photos={[img0, img1, img2, img3, img4, img5, img6]}
-      words={["apple"]}
-      maxWrong={6}
+    images={[img0, img1, img2, img3, img4, img5, img6]}
+    words={["apple"]}
+    maxWrong={maxWrong}
     />
-  );
+    );
 
-  // expect the button area to have visibility hidden
-  expect(
-    container.querySelector('.buttonsOrMessageArea')
-  ).toHaveStyle('visibility: hidden')
+  const letters = ["z", "b", "c", "d", "y", "f"];
 
-  // expect the message "You lose" to be displayed
-  expect(
-    container.querySelector('.buttonsOrMessageArea')
-  ).toContainHTML("You lose");
+  for (let i = 0; i < maxWrong; i++) {
+    let letterButton = container.querySelector(`button[value=${letters[i]}]`);
+    console.log("letterButton", letterButton)
+    fireEvent.click(letterButton);
+  }
 
-  // expect the correct word to be displayed
+  // expect the button area to not exist
   expect(
-    container.querySelector('.buttonsOrMessageArea')
+    container.querySelector('.buttonsArea')
+  ).not.toBeInTheDocument();
+
+  // expect the message area to contain "you lose" and "apple"
+  expect(
+    container.querySelector('.messageArea')
+  ).toContainHTML("You lose", "apple");
+
+  expect(
+    container.querySelector('.messageArea')
   ).toContainHTML("apple");
 
   // expect it to match snapshot

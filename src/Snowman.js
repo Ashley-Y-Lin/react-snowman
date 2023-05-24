@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { randomWord, ENGLISH_WORDS } from "./words";
 
 import "./Snowman.css";
 import img0 from "./0.png";
@@ -25,7 +26,7 @@ import img6 from "./6.png";
 
 function Snowman({
   images = [img0, img1, img2, img3, img4, img5, img6],
-  words = ["apple"],
+  words = [randomWord(ENGLISH_WORDS)],
   maxWrong = 6,
 }) {
   /** by default, allow 6 guesses and use provided gallows images. */
@@ -61,7 +62,6 @@ function Snowman({
 
   /** generateButtons: return array of letter buttons to render */
   function generateButtons() {
-    const isHidden = nWrong >= maxWrong ? { visibility: "hidden" } : { visibility: "visible" };
 
     return "abcdefghijklmnopqrstuvwxyz".split("").map(ltr => (
       <button
@@ -75,12 +75,27 @@ function Snowman({
     ));
   }
 
+  /** isGameOver: returns a boolean that signifies if game is over */
+  function isGameOver() {
+    const isGameOver = nWrong >= maxWrong ? true : false;
+    return isGameOver;
+  }
+
+  /** restartGame: picks a new random word */
+  function isGameOver() {
+    const isGameOver = nWrong >= maxWrong ? true : false;
+    return isGameOver;
+  }
+
   return (
     <div className="Snowman">
       <img src={(images)[nWrong]} alt={nWrong} />
       <p>Number wrong: {nWrong}</p>
       <p className="Snowman-word">{guessedWord()}</p>
-      <p style={isHidden} className="buttonsOrMessageArea">{generateButtons()}</p>
+      {isGameOver() ?
+        <p className="messageArea">{`You lose. The correct answer was ${answer}`}</p> :
+        <p className="buttonsArea">{generateButtons()}</p>
+      }
     </div>
   );
 }
